@@ -1,1 +1,307 @@
-(DOCS HTML)
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FiveM / GTA Shop – Professionell</title>
+  <style>
+    :root {
+      --primary: #00d4ff;
+      --dark: #0f1117;
+      --dark2: #161b22;
+      --light: #e2e8f0;
+      --gray: #a0aec0;
+    }
+
+    
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;}
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(to right, #0f172a, #1e293b);
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid #334155;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .cart-btn {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cart-btn:hover {
+      background: #00eaff;
+      transform: translateY(-1px);
+    }
+
+    .cart-count {
+      background: #000;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      margin-left: 8px;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 5%;
+    }
+
+    h2.category-title {
+      color: var(--primary);
+      margin: 2.5rem 0 1.5rem;
+      font-size: 2rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 1rem;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .product-card {
+      background: var(--dark2);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #334155;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.12);
+    }
+
+    .product-img {
+      height: 180px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: #334155;
+    }
+
+    .product-info {
+      padding: 1.4rem;
+    }
+
+    .product-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .product-desc {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      min-height: 60px;
+    }
+
+    .product-price {
+      color: #34d399;
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .btn-add {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-add:hover {
+      background: #00eaff;
+    }
+
+    .btn-add.added {
+      background: #10b981;
+      color: white;
+      cursor: default;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gray);
+      border-top: 1px solid #334155;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <h1>FiveM Shop</h1>
+    <button class="cart-btn">
+      Warenkorb <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <h2 class="category-title">MLOs</h2>
+  <div class="products-grid" id="mlo-products">
+    <!-- MLO Produkte kommen hier rein -->
+  </div>
+
+  <h2 class="category-title">Autos</h2>
+  <div class="products-grid" id="car-products">
+    <!-- Autos kommen hier rein -->
+  </div>
+
+  <h2 class="category-title">Allgemeine Skripte</h2>
+  <div class="products-grid" id="script-products">
+    <!-- Allgemeine Skripte kommen hier rein -->
+  </div>
+
+</main>
+
+<footer>
+  © 2025–2026 FiveM Shop • Noch in Entwicklung – Zahlung kommt bald
+</footer>
+
+<script>
+// ================================================
+//  Sehr einfaches Warenkorb-System (lokal im Browser)
+// ================================================
+
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+updateCartCount();
+
+function updateCartCount() {
+  const countEl = document.getElementById('cartCount');
+  if (countEl) countEl.textContent = cart.length;
+}
+
+function addToCart(product) {
+  // Prüfen ob schon im Warenkorb
+  if (cart.some(item => item.id === product.id)) {
+    alert(product.name + " ist bereits im Warenkorb!");
+    return;
+  }
+
+  cart.push(product);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+
+  // Visuelles Feedback
+  const btn = document.querySelector(`[data-id="${product.id}"]`);
+  if (btn) {
+    btn.textContent = "Im Warenkorb ✓";
+    btn.classList.add('added');
+  }
+
+  console.log("Warenkorb:", cart);
+}
+
+// ================================================
+//  Beispiel-Produkte (du kannst beliebig erweitern)
+// ================================================
+
+const products = {
+  mlos: [
+    { id: "mlo1", name: "Modernes Police Department MLO", price: "€34,99", desc: "Großes PD mit Zellen, Garage, Büro & mehr" },
+    { id: "mlo2", name: "Luxus Villa mit Pool", price: "€24,99", desc: "Perfekt für Roleplay Reiche" },
+    { id: "mlo3", name: "Illegaler Nightclub MLO", price: "€29,99", desc: "Versteckte Räume + Bühne" },
+    { id: "mlo4", name: "Krankenhaus Komplettumbau", price: "€44,99", desc: "Realistische Krankenhaus-Atmosphäre" }
+  ],
+  cars: [
+    { id: "car1", name: "BMW M3 G80 Widebody", price: "€19,99", desc: "Custom Addon + Tuning" },
+    { id: "car2", name: "Mercedes G63 AMG 6x6", price: "€24,99", desc: "Sehr seltenes Modell" },
+    { id: "car3", name: "Lamborghini Huracán STO", price: "€22,99", desc: "2025 Release – Top Qualität" },
+    { id: "car4", name: "Toyota Supra MK4 Drift", price: "€16,99", desc: "Drift Handling optimiert" }
+  ],
+  scripts: [
+    { id: "scr1", name: "Advanced Banking System", price: "€39,99", desc: "Konto, Überweisung, Zinsen, ATM" },
+    { id: "scr2", name: "Drug System + Plantage", price: "€49,99", desc: "Komplettes Drogenbusiness" },
+    { id: "scr3", name: "Jobcenter & Bewerbungssystem", price: "€29,99", desc: "Realistisches Job RP" },
+    { id: "scr4", name: "HUD Modern & Clean", price: "€19,99", desc: "Minimalistisch & anpassbar" },
+    { id: "scr5", name: "Waffen- & Munitionslager", price: "€34,99", desc: "Mit Crafting & Schwarzmarkt" }
+  ]
+};
+
+// Produkte rendern
+function renderProducts() {
+  const containers = {
+    mlos: document.getElementById('mlo-products'),
+    cars: document.getElementById('car-products'),
+    scripts: document.getElementById('script-products')
+  };
+
+  Object.keys(containers).forEach(key => {
+    const container = containers[key];
+    if (!container) return;
+
+    container.innerHTML = products[key].map(p => `
+      <div class="product-card">
+        <div class="product-img">${key === 'mlos' ? '🏠' : key === 'cars' ? '🚗' : '💻'}</div>
+        <div class="product-info">
+          <h3 class="product-title">${p.name}</h3>
+          <p class="product-desc">${p.desc}</p>
+          <div class="product-price">${p.price}</div>
+          <button 
+            class="btn-add" 
+            data-id="${p.id}"
+            onclick='addToCart(${JSON.stringify(p)})'
+          >In den Warenkorb</button>
+        </div>
+      </div>
+    `).join('');
+  });
+}
+
+renderProducts();
+</script>
+
+</body>
+</html>
